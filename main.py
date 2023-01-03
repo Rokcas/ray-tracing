@@ -7,22 +7,7 @@ from src.utils import extract
 from src.sphere import Sphere, CheckeredSphere
 from src.constants import FARAWAY
 from src.scene import Scene
-from src.light import LightSource
-
-
-scene = Scene(
-    Vec3(0, 0.35, -1),
-    ...,
-    [
-        Sphere(Vec3(.75, .1, 1), .6, Rgb(0, 0, 1)),
-        Sphere(Vec3(-.75, .1, 2.25), .6, Rgb(.5, .223, .5)),
-        Sphere(Vec3(-2.75, .1, 3.5), .6, Rgb(1, .572, .184)),
-        CheckeredSphere(Vec3(0,-99999.5, 0), 99999, Rgb(.75, .75, .75), 0.25),
-    ],
-    [
-        LightSource(Vec3(5, 5, -10), Rgb(1, 1, 1))
-    ]
-)
+from example_scene import scene
 
 
 def raytrace(O, D, scene: Scene, bounce = 0):
@@ -78,13 +63,15 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
 
 
 t0 = time.time()
-Q = scene.get_rays()
-color = raytrace(scene.camera, (Q - scene.camera).norm(), scene)
+rays = scene.get_rays()
+color = raytrace(scene.camera, rays, scene)
 print("Took", time.time() - t0)
-w, h = 1920, 1080
 
-rgb = [Image.fromarray((255 * np.clip(c, 0, 1).reshape((h, w))).astype(np.uint8), "L") for c in color.components()]
-res = Image.merge("RGB", rgb)
-res.show()
-# res.save("rt3.png")
+width = scene.screen.width
+height = scene.screen.height
+
+rgb = [Image.fromarray((255 * np.clip(c, 0, 1).reshape((height, width))).astype(np.uint8), "L") for c in color.components()]
+result = Image.merge("RGB", rgb)
+result.show()
+# res.save("output.png")
 

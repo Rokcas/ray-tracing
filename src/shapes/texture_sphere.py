@@ -1,12 +1,14 @@
-from src.shapes.base import BaseShape
-from src.vec3 import Vec3, Rgb
-from dataclasses import dataclass
-import numpy as np
-from src.constants import FARAWAY
 import math
-from PIL import Image
-from src.shapes.sphere import Sphere
+from dataclasses import dataclass
 from functools import cached_property
+
+import numpy as np
+from PIL import Image
+
+from src.constants import FARAWAY
+from src.shapes.base import BaseShape
+from src.shapes.sphere import Sphere
+from src.vec3 import Rgb, Vec3
 
 
 @dataclass

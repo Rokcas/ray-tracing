@@ -1,10 +1,12 @@
-from src.scene import Scene
-from functools import reduce
-import numpy as np
-from src.vec3 import Vec3, Rgb
-from src.constants import FARAWAY, MAX_BOUNCES
 import math
+from functools import reduce
+
+import numpy as np
+
+from src.constants import FARAWAY, MAX_BOUNCES
+from src.scene import Scene
 from src.shapes.base import BaseShape
+from src.vec3 import Rgb, Vec3
 
 
 def raytrace(

@@ -1,9 +1,11 @@
-from functools import reduce
-import numpy as np
-from src.constants import FARAWAY
-from src.vec3 import Vec3, Rgb
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from functools import reduce
+
+import numpy as np
+
+from src.constants import FARAWAY
+from src.vec3 import Rgb, Vec3
 
 
 @dataclass

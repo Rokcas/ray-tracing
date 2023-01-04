@@ -1,8 +1,8 @@
-from src.vec3 import Vec3, Rgb
-from src.shapes.sphere import Sphere
+from src.scene import LightSource, Scene, Screen
 from src.shapes.checkered_sphere import CheckeredSphere
+from src.shapes.sphere import Sphere
 from src.shapes.texture_sphere import TextureSphere
-from src.scene import Screen, Scene, LightSource
+from src.vec3 import Rgb, Vec3
 
 WIDTH = 600
 HEIGHT = 300

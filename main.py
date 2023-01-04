@@ -1,14 +1,15 @@
-from PIL import Image
-from functools import reduce
-import numpy as np
+import multiprocessing
 import time
-from src.vec3 import Vec3, Rgb
+from functools import reduce
+
+import numpy as np
+from PIL import Image
+
+from example_scene import scene
 from src.constants import FARAWAY, MAX_BOUNCES
 from src.scene import Scene
 from src.tracing import raytrace
-from example_scene import scene
-import multiprocessing
-
+from src.vec3 import Rgb, Vec3
 
 t0 = time.time()
 rays = scene.get_rays()

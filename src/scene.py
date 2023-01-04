@@ -1,7 +1,9 @@
 from dataclasses import dataclass
-from src.vec3 import Vec3, Rgb
-from src.shapes.base import BaseShape
+
 import numpy as np
+
+from src.shapes.base import BaseShape
+from src.vec3 import Rgb, Vec3
 
 
 @dataclass

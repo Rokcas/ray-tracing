@@ -4,57 +4,59 @@ import numpy as np
 from src.vec3 import Vec3, Rgb
 from src.constants import FARAWAY, MAX_BOUNCES
 import math
+from src.shapes.base import BaseShape
 
-def raytrace(O: Vec3, D: Vec3, scene: Scene, bounce: int = 0) -> Rgb:
-    # O is the ray origin, D is the normalized ray direction
-    # scene is a list of Sphere objects (see below)
-    # bounce is the number of the bounce, starting at zero for camera rays
+def raytrace(ray_origin: Vec3, ray_direction: Vec3, scene: Scene, bounce: int = 0) -> Rgb:
+    """Trace the given ray to find its RGB colour."""
 
     objects = scene.objects
-    distance_map = {obj.intersect(O, D): obj for obj in objects}
+    distance_map = {obj.intersect(ray_origin, ray_direction): obj for obj in objects}
     shortest_distance = min(distance_map.keys())
     nearest_object = distance_map[shortest_distance]
 
-    colour = Rgb(0, 0, 0)
     if shortest_distance != FARAWAY:
-        return illuminate(nearest_object, O, D, shortest_distance, scene, bounce)
+        return illuminate(nearest_object, ray_origin, ray_direction, shortest_distance, scene, bounce)
     return Rgb(0, 0, 0)
 
 
-def illuminate(obj, O, D, d, scene: Scene, bounce):
-    M = (O + D * d)                         # intersection point
-    N = obj.normalAt(M)                    # normal
-    toO = (scene.camera - M).norm()                    # direction to ray origin
-    nudged = M + N * .0001                  # M nudged to avoid itself
+def illuminate(obj: BaseShape, ray_origin: Vec3, ray_direction: Vec3, distance: float, scene: Scene, bounce: int) -> Rgb:
+    """Return the object's illumination at the point it intersects with the ray."""
+
+    ipoint = (ray_origin + ray_direction * distance)                    # intersection point
+    normal = obj.normalAt(ipoint)                                       # normal
+
+    # TODO: check this
+    to_ray_origin = (scene.camera - ipoint).norm()                      # direction to ray origin
+    nudged = ipoint + normal * .0001                                    # ipoint nudged to avoid intersecting with the same object
     objects = scene.objects
 
     # Ambient
-    diffuse_colour = obj.diffuseColourAt(M)
-    colour = Rgb(0.05, 0.05, 0.05).compwise_mul(diffuse_colour)
+    diffuse_colour = obj.diffuseColourAt(ipoint)
+    colour = scene.ambient_light.compwise_mul(diffuse_colour)
 
     # Calculate diffuse and specular illumination from each light source
     for light_source in scene.light_sources:
-        toL = (light_source.position - M).norm()              # direction to light
+        to_light = (light_source.position - ipoint).norm()              # direction to light
 
         # Shadow: find if the point is shadowed or not.
-        # This amounts to finding out if M can see the light
-        light_distances = [s.intersect(nudged, toL) for s in objects]
+        # This is equivalent to finding if other objects are between ipoint and the light source
+        light_distances = [o.intersect(nudged, to_light) for o in objects]
         shortest_light_distance = min(light_distances)
-        sees_light = shortest_light_distance == obj.intersect(nudged, toL)
+        sees_light = shortest_light_distance == obj.intersect(nudged, to_light)
 
         if sees_light:
             # Lambert shading (diffuse)
-            lv = max(N.dot(toL), 0)
+            lv = max(normal.dot(to_light), 0)
             colour += light_source.colour.compwise_mul(diffuse_colour) * lv
 
             # Blinn-Phong shading (specular)
-            phong = N.dot((toL + toO).norm())
+            phong = normal.dot((to_light + to_ray_origin).norm())
             colour += light_source.colour.compwise_mul(obj.specular_colour) * math.pow(np.clip(phong, 0, 1), obj.roughness)
 
     # Reflection
     if bounce < MAX_BOUNCES:
-        rayD = (D - N * 2 * D.dot(N)).norm()
+        reflection_direction = (ray_direction - normal * 2 * ray_direction.dot(normal)).norm()
         colour *= 1 - obj.reflectivity
-        colour += raytrace(nudged, rayD, scene, bounce + 1) * obj.reflectivity
+        colour += raytrace(nudged, reflection_direction, scene, bounce + 1) * obj.reflectivity
 
     return colour

@@ -9,18 +9,18 @@ HEIGHT = 300
 RATIO = WIDTH / HEIGHT
 
 scene = Scene(
-    Vec3(0, 0.35, -1),
-    Screen(
-        (
+    camera=Vec3(0, 0.35, -1),
+    screen=Screen(
+        corners=(
             Vec3(-1, 1 / RATIO + 0.25, 0),
             Vec3(1, 1 / RATIO + 0.25, 0),
             Vec3(1, -1 / RATIO + 0.25, 0),
             Vec3(-1, -1 / RATIO + 0.25, 0)
         ),
-        WIDTH,
-        HEIGHT
+        width=WIDTH,
+        height=HEIGHT
     ),
-    [
+    objects=[
         Sphere(                                     # Blue sphere
             diffuse_colour=Rgb(0, 0, 1),
             centre=Vec3(.75, .1, 1),
@@ -49,7 +49,8 @@ scene = Scene(
             radius=99999
         )
     ],
-    [
+    ambient_light=Rgb(.1, .1, .1),
+    light_sources=[
         LightSource(
             position=Vec3(5, 5, -10),
             colour=Rgb(0.8, 1, 1)

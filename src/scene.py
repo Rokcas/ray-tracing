@@ -19,6 +19,8 @@ class Screen:
     height: int
 
     def get_pixel_locations(self) -> list[Vec3]:
+        """Return the pixels through which the rays will be traced."""
+
         w = self.width
         h = self.height
         corners = self.corners
@@ -40,9 +42,12 @@ class Scene:
     camera: Vec3
     screen: Screen
     objects: list[BaseShape]
+    ambient_light: Rgb
     light_sources: list[LightSource]
 
     def get_rays(self) -> list[Vec3]:
+        """Return the directions of rays to be traced."""
+
         pixel_locations = self.screen.get_pixel_locations()
 
         return [(ploc - self.camera).norm() for ploc in pixel_locations]

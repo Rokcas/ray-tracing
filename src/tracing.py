@@ -19,16 +19,6 @@ def raytrace(O: Vec3, D: Vec3, scene: Scene, bounce: int = 0) -> Rgb:
     if shortest_distance != FARAWAY:
         return illuminate(nearest_object, O, D, shortest_distance, scene, bounce)
     return Rgb(0, 0, 0)
-    #
-    # for (s, d) in zip(objects, distances):
-    #     hit = (nearest != FARAWAY) & (d == nearest)
-    #     if np.any(hit) or True:
-    #         dc = extract(hit, d)
-    #         Oc = O.extract(hit)
-    #         Dc = D.extract(hit)
-    #         cc = illuminate(s, Oc, Dc, dc, scene, bounce)
-    #         colour += cc.place(hit)
-    # return colour
 
 
 def illuminate(obj, O, D, d, scene: Scene, bounce):
@@ -36,11 +26,11 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
     N = obj.normalAt(M)                    # normal
     toO = (scene.camera - M).norm()                    # direction to ray origin
     nudged = M + N * .0001                  # M nudged to avoid itself
+    objects = scene.objects
 
     # Ambient
-    colour = Rgb(0.05, 0.05, 0.05)
-
-    objects = scene.objects
+    diffuse_colour = obj.diffuseColourAt(M)
+    colour = Rgb(0.05, 0.05, 0.05).compwise_mul(diffuse_colour)
 
     # Calculate diffuse and specular illumination from each light source
     for light_source in scene.light_sources:
@@ -55,16 +45,16 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
         if sees_light:
             # Lambert shading (diffuse)
             lv = max(N.dot(toL), 0)
-            colour += light_source.colour.compwise_mul(obj.diffuseColourAt(M)) * lv
+            colour += light_source.colour.compwise_mul(diffuse_colour) * lv
 
             # Blinn-Phong shading (specular)
             phong = N.dot((toL + toO).norm())
-            colour += light_source.colour * math.pow(np.clip(phong, 0, 1), 50)
+            colour += light_source.colour.compwise_mul(obj.specular_colour) * math.pow(np.clip(phong, 0, 1), obj.roughness)
 
     # Reflection
     if bounce < MAX_BOUNCES:
         rayD = (D - N * 2 * D.dot(N)).norm()
-        colour *= 1 - obj.mirror
-        colour += raytrace(nudged, rayD, scene, bounce + 1) * obj.mirror
+        colour *= 1 - obj.reflectivity
+        colour += raytrace(nudged, rayD, scene, bounce + 1) * obj.reflectivity
 
     return colour

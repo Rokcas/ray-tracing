@@ -30,7 +30,6 @@ class Vec3():
     def __abs__(self):
         return self.dot(self)
     def length(self):
-        # print(abs(self))
         return math.sqrt(abs(self))
     def compwise_mul(self, other):
         return Vec3(self.x * other.x, self.y * other.y, self.z * other.z)
@@ -39,21 +38,5 @@ class Vec3():
         return self if length == 0 else self / length
     def components(self):
         return (self.x, self.y, self.z)
-    # def extract(self, cond):
-    #     return Vec3(extract(cond, self.x),
-    #                 extract(cond, self.y),
-    #                 extract(cond, self.z))
-    # def place(self, cond):
-    #     r = Vec3(np.zeros(cond.shape), np.zeros(cond.shape), np.zeros(cond.shape))
-    #     np.place(r.x, cond, self.x)
-    #     np.place(r.y, cond, self.y)
-    #     np.place(r.z, cond, self.z)
-    #     return r
-    # def where(self, cond, other):
-    #     return Vec3(
-    #         np.where(cond, self.x, other.x),
-    #         np.where(cond, self.y, other.y),
-    #         np.where(cond, self.z, other.z),
-    #     )
 
 Rgb = Vec3

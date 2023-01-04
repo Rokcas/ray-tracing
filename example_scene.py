@@ -21,14 +21,42 @@ scene = Scene(
         HEIGHT
     ),
     [
-        TextureSphere(Rgb(0, 0, 1), 0, Vec3(.75, .1, 1), .6, "cat.webp"),
-        # Sphere(Rgb(0, 0, 1), 0.3, Vec3(.75, .1, 1), .6),                # Blue sphere
-        Sphere(Rgb(.3, .7, .3), 0.1, Vec3(-.75, .1, 2.25), .6),         # Green sphere
-        Sphere(Rgb(1, .2, .1), 0.2, Vec3(-2.75, .1, 3.5), .6),          # Red sphere
-        CheckeredSphere(Rgb(.75, .75, .75), 0.25, Vec3(0,-99999.5, 0), 99999),
+        Sphere(                                     # Blue sphere
+            diffuse_colour=Rgb(0, 0, 1),
+            centre=Vec3(.75, .1, 1),
+            radius=.6
+        ),
+        Sphere(                                     # Green sphere
+            diffuse_colour=Rgb(.3, .7, .3),
+            centre=Vec3(-.75, .1, 2.25),
+            radius=.6,
+            roughness=30,
+            reflectivity=.1
+        ),
+        TextureSphere(                              # Red sphere
+            diffuse_colour=Rgb(1, .2, .1),
+            centre=Vec3(-2.75, .1, 3.5),
+            radius=.6,
+
+            # Attributes to make cat texture more visible
+            specular_colour=Rgb(0, 0, 0),
+            reflectivity=0,
+            texture_path="cat.webp"
+        ),
+        CheckeredSphere(
+            diffuse_colour=Rgb(.75, .75, .75),
+            centre=Vec3(0, -99999.5, 0),
+            radius=99999
+        )
     ],
     [
-        LightSource(Vec3(5, 5, -10), Rgb(0.8, 1, 1)),
-        LightSource(Vec3(-10, 10, 0), Rgb(1, 0.9, 0.9))
+        LightSource(
+            position=Vec3(5, 5, -10),
+            colour=Rgb(0.8, 1, 1)
+        ),
+        LightSource(
+            position=Vec3(-10, 10, 0),
+            colour=Rgb(1, 0.9, 0.9)
+        )
     ]
 )

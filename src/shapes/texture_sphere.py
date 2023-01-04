@@ -10,7 +10,7 @@ from functools import cached_property
 
 @dataclass
 class TextureSphere(Sphere):
-    texture_path: str
+    texture_path: str = "cat.webp"
 
     @cached_property
     def texture_width(self):

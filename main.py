@@ -7,22 +7,26 @@ from src.constants import FARAWAY, MAX_BOUNCES
 from src.scene import Scene
 from src.tracing import raytrace
 from example_scene import scene
+import multiprocessing
 
 
 t0 = time.time()
 rays = scene.get_rays()
 
-colour = [raytrace(scene.camera, ray, scene) for ray in rays]
+# Multiprocessing to speed up rendering
+def fn(ray):
+    return raytrace(scene.camera, ray, scene)
+
+print(f"Found {multiprocessing.cpu_count()} cores")
+with multiprocessing.Pool() as p:
+    colours = p.map(fn, rays)
+
 print("Took", time.time() - t0)
 
-width = scene.screen.width
-height = scene.screen.height
-
-pixels = [tuple(int(255 * x) for x in c.components()) for c in colour]
-img = Image.new("RGB", (width, height))
+pixels = [tuple(int(255 * x) for x in c.components()) for c in colours]
+img = Image.new("RGB", (scene.screen.width, scene.screen.height))
 img.putdata(pixels)
-# rgb = [Image.fromarray((255 * np.clip(c, 0, 1).reshape((height, width))).astype(np.uint8), "L") for c in colour.components()]
-# result = Image.merge("RGB", rgb)
+
+img.save("output.png")  # Uncomment to save the result
 img.show()
-# res.save("output.png")
 

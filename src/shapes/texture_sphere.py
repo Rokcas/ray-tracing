@@ -2,13 +2,10 @@ import math
 from dataclasses import dataclass
 from functools import cached_property
 
-import numpy as np
 from PIL import Image
 
-from src.constants import FARAWAY
-from src.shapes.base import BaseShape
 from src.shapes.sphere import Sphere
-from src.vec3 import Rgb, Vec3
+from src.vec3 import Rgb
 
 
 @dataclass
@@ -33,8 +30,6 @@ class TextureSphere(Sphere):
 
         theta = math.acos(R.y / self.radius)
         phi = math.atan2(R.x, R.z)
-
-        texture = Image.open(self.texture_path)
 
         u = int(phi / 2 / math.pi * self.texture_width)
         v = int(theta / math.pi * self.texture_height)

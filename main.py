@@ -1,21 +1,17 @@
 import multiprocessing
 import time
-from functools import reduce
 
-import numpy as np
 from PIL import Image
 
 from example_scene import scene
-from src.constants import FARAWAY, MAX_BOUNCES
-from src.scene import Scene
 from src.tracing import raytrace
-from src.vec3 import Rgb, Vec3
+from src.vec3 import Rgb
 
 t0 = time.time()
 rays = scene.get_rays()
 
 # Multiprocessing to speed up rendering
-def fn(ray):
+def fn(ray) -> Rgb:
     return raytrace(scene.camera, ray, scene)
 
 

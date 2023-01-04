@@ -1,10 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from functools import reduce
 
-import numpy as np
-
-from src.constants import FARAWAY
 from src.vec3 import Rgb, Vec3
 
 
@@ -22,7 +18,7 @@ class BaseShape(ABC):
     roughness: float = 50  # Used to control the spread of specular lighting
 
     @abstractmethod
-    def intersect(self, O, D):
+    def intersect(self, O, D) -> float:
         """Return the distance to intersection of the object and a ray coming from O in direction D.
 
         Return FARAWAY if there is no intersection.
@@ -30,10 +26,10 @@ class BaseShape(ABC):
         pass
 
     @abstractmethod
-    def normalAt(self, M):
+    def normalAt(self, M) -> Vec3:
         """Given a point on the object, return the surface normal at that point."""
         pass
 
-    def diffuseColourAt(self, M):
+    def diffuseColourAt(self, M) -> Rgb:
         """Return the diffuse colour of the object at the given point on its surface."""
         return self.diffuse_colour

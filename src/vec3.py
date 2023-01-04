@@ -9,25 +9,25 @@ class Vec3():
     y: float
     z: float
 
-    def __neg__(self) -> Vec3:
+    def __neg__(self):
         """Negate the vector."""
         return Vec3(-self.x, -self.y, -self.z)
-    def __mul__(self, other) -> Vec3:
+    def __mul__(self, other):
         """Scale the vector by a number."""
         return Vec3(self.x * other, self.y * other, self.z * other)
-    def __truediv__(self, other) -> Vec3:
+    def __truediv__(self, other):
         """Scale the vector by the inverse of the given number."""
         return Vec3(self.x / other, self.y / other, self.z / other)
-    def __add__(self, other) -> Vec3:
+    def __add__(self, other):
         """Add two vectors."""
         return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
-    def __sub__(self, other) -> Vec3:
+    def __sub__(self, other):
         """Subtract one vector from another."""
         return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
     def dot(self, other) -> float:
         """Calculate the dot product of two vectors."""
         return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
-    def cross(self, other) -> Vec3:
+    def cross(self, other):
         """Calculate the cross product of two vectors."""
         return Vec3(
             self.y * other.z - self.z * other.y,
@@ -40,10 +40,10 @@ class Vec3():
     def length(self) -> float:
         """Calculate the length of the vector."""
         return math.sqrt(abs(self))
-    def compwise_mul(self, other) -> Vec3:
+    def compwise_mul(self, other):
         """Multiply two vectors element-wise."""
         return Vec3(self.x * other.x, self.y * other.y, self.z * other.z)
-    def norm(self) -> Vec3:
+    def norm(self):
         """Normalise the vector to have a length of 1."""
         length = self.length()
         return self if length == 0 else self / length

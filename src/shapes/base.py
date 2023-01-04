@@ -21,10 +21,6 @@ class BaseShape(ABC):
         pass
 
     @abstractmethod
-    def intersect(self, O, D):
-        pass
-
-    @abstractmethod
     def normalAt(self, M):
         pass
 

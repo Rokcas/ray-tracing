@@ -9,16 +9,23 @@ class Sphere(BaseShape):
     centre: Vec3
     radius: float
 
-    def intersect(self, O, D):
+    def intersect(self, O: Vec3, D: Vec3) -> float:
         b = 2 * D.dot(O - self.centre)
         c = abs(self.centre) + abs(O) - 2 * self.centre.dot(O) - (self.radius * self.radius)
         disc = (b ** 2) - (4 * c)
-        sq = np.sqrt(np.maximum(0, disc))
+
+        if disc < 0:
+            return FARAWAY
+
+        sq = np.sqrt(disc)
         h0 = (-b - sq) / 2
         h1 = (-b + sq) / 2
-        h = np.where((h0 > 0) & (h0 < h1), h0, h1)
-        pred = (disc > 0) & (h > 0)
-        return np.where(pred, h, FARAWAY)
+
+        if min(h0, h1) > 0:
+            return min(h0, h1)
+        if max(h0, h1) > 0:
+            return max(h0, h1)
+        return FARAWAY
 
     def normalAt(self, M):
         return (M - self.centre) * (1. / self.radius)

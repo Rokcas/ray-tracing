@@ -1,28 +1,34 @@
 from src.scene import Scene
 from functools import reduce
 import numpy as np
-from src.vec3 import Rgb
+from src.vec3 import Vec3, Rgb
 from src.constants import FARAWAY, MAX_BOUNCES
-from src.utils import extract
+import math
 
-def raytrace(O, D, scene: Scene, bounce = 0):
+def raytrace(O: Vec3, D: Vec3, scene: Scene, bounce: int = 0) -> Rgb:
     # O is the ray origin, D is the normalized ray direction
     # scene is a list of Sphere objects (see below)
     # bounce is the number of the bounce, starting at zero for camera rays
 
     objects = scene.objects
-    distances = [s.intersect(O, D) for s in objects]
-    nearest = reduce(np.minimum, distances)
+    distance_map = {obj.intersect(O, D): obj for obj in objects}
+    shortest_distance = min(distance_map.keys())
+    nearest_object = distance_map[shortest_distance]
+
     colour = Rgb(0, 0, 0)
-    for (s, d) in zip(objects, distances):
-        hit = (nearest != FARAWAY) & (d == nearest)
-        if np.any(hit) or True:
-            dc = extract(hit, d)
-            Oc = O.extract(hit)
-            Dc = D.extract(hit)
-            cc = illuminate(s, Oc, Dc, dc, scene, bounce)
-            colour += cc.place(hit)
-    return colour
+    if shortest_distance != FARAWAY:
+        return illuminate(nearest_object, O, D, shortest_distance, scene, bounce)
+    return Rgb(0, 0, 0)
+    #
+    # for (s, d) in zip(objects, distances):
+    #     hit = (nearest != FARAWAY) & (d == nearest)
+    #     if np.any(hit) or True:
+    #         dc = extract(hit, d)
+    #         Oc = O.extract(hit)
+    #         Dc = D.extract(hit)
+    #         cc = illuminate(s, Oc, Dc, dc, scene, bounce)
+    #         colour += cc.place(hit)
+    # return colour
 
 
 def illuminate(obj, O, D, d, scene: Scene, bounce):
@@ -43,16 +49,17 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
         # Shadow: find if the point is shadowed or not.
         # This amounts to finding out if M can see the light
         light_distances = [s.intersect(nudged, toL) for s in objects]
-        light_nearest = reduce(np.minimum, light_distances)
-        seelight = light_distances[objects.index(obj)] == light_nearest
+        shortest_light_distance = min(light_distances)
+        sees_light = shortest_light_distance == obj.intersect(nudged, toL)
 
-        # Lambert shading (diffuse)
-        lv = np.maximum(N.dot(toL), 0)
-        colour += light_source.colour.compwise_mul(obj.diffuseColourAt(M)) * lv * seelight
+        if sees_light:
+            # Lambert shading (diffuse)
+            lv = max(N.dot(toL), 0)
+            colour += light_source.colour.compwise_mul(obj.diffuseColourAt(M)) * lv
 
-        # Blinn-Phong shading (specular)
-        phong = N.dot((toL + toO).norm())
-        colour += light_source.colour * np.power(np.clip(phong, 0, 1), 50) * seelight
+            # Blinn-Phong shading (specular)
+            phong = N.dot((toL + toO).norm())
+            colour += light_source.colour * math.pow(np.clip(phong, 0, 1), 50)
 
     # Reflection
     if bounce < MAX_BOUNCES:

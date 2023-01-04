@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from src.vec3 import Vec3, Rgb
-from src.sphere import Sphere
+from src.shapes.base import BaseShape
 import numpy as np
 
 
@@ -39,7 +39,7 @@ class Screen:
 class Scene:
     camera: Vec3
     screen: Screen
-    objects: list[Sphere]
+    objects: list[BaseShape]
     light_sources: list[LightSource]
 
     def get_rays(self) -> Vec3:

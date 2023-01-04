@@ -29,8 +29,7 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
     M = (O + D * d)                         # intersection point
     N = obj.normalAt(M)                    # normal
     toO = (scene.camera - M).norm()                    # direction to ray origin
-    nudged_outwards = M + N * .0001                  # M nudged to avoid itself
-    nudged_inwards = M - N * .0001
+    nudged = M + N * .0001                  # M nudged to avoid itself
 
     # Ambient
     colour = Rgb(0.05, 0.05, 0.05)
@@ -43,13 +42,13 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
 
         # Shadow: find if the point is shadowed or not.
         # This amounts to finding out if M can see the light
-        light_distances = [s.intersect(nudged_outwards, toL) for s in objects]
+        light_distances = [s.intersect(nudged, toL) for s in objects]
         light_nearest = reduce(np.minimum, light_distances)
         seelight = light_distances[objects.index(obj)] == light_nearest
 
         # Lambert shading (diffuse)
         lv = np.maximum(N.dot(toL), 0)
-        colour += light_source.colour.compwise_mul(obj.diffusecolour(M)) * lv * seelight
+        colour += light_source.colour.compwise_mul(obj.diffuseColourAt(M)) * lv * seelight
 
         # Blinn-Phong shading (specular)
         phong = N.dot((toL + toO).norm())
@@ -59,8 +58,6 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
     if bounce < MAX_BOUNCES:
         rayD = (D - N * 2 * D.dot(N)).norm()
         colour *= 1 - obj.mirror
-        colour += raytrace(nudged_outwards, rayD, scene, bounce + 1) * obj.mirror
-    colour *= (1 - obj.transparency)
-
+        colour += raytrace(nudged, rayD, scene, bounce + 1) * obj.mirror
 
     return colour

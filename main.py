@@ -4,7 +4,6 @@ import numpy as np
 import time
 from src.vec3 import Vec3, Rgb
 from src.utils import extract
-from src.sphere import Sphere, CheckeredSphere
 from src.constants import FARAWAY, MAX_BOUNCES
 from src.scene import Scene
 from src.tracing import raytrace

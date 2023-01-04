@@ -20,8 +20,5 @@ class Sphere(BaseShape):
         pred = (disc > 0) & (h > 0)
         return np.where(pred, h, FARAWAY)
 
-    def diffuseColourAt(self, M):
-        return self.diffuse_colour
-
     def normalAt(self, M):
         return (M - self.centre) * (1. / self.radius)

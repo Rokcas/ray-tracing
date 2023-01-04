@@ -23,4 +23,4 @@ class BaseShape(ABC):
         pass
 
     def diffuseColourAt(self, M):
-        return self.diffuse
+        return self.diffuse_colour

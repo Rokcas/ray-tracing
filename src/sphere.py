@@ -11,8 +11,6 @@ class Sphere:
     r: float
     diffuse: Rgb
     mirror: float = 0.5
-    transparency: float = 0
-    refractive_index: float = 1
 
     def intersect(self, O, D):
         b = 2 * D.dot(O - self.c)

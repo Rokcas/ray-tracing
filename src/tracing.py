@@ -62,23 +62,5 @@ def illuminate(obj, O, D, d, scene: Scene, bounce):
         colour += raytrace(nudged_outwards, rayD, scene, bounce + 1) * obj.mirror
     colour *= (1 - obj.transparency)
 
-    # Refraction
-    if bounce < MAX_BOUNCES:
-        is_entering = (O - obj.c).length() > obj.r
-        refraction_ratio = np.where(is_entering, 1 / obj.refractive_index, obj.refractive_index)  # n1/n2
-        N = N.where(is_entering, -N)
-
-        cross = D.cross(-N).length() * refraction_ratio
-
-        full_reflection = abs(cross) > 1
-
-        out_angle = np.arcsin(cross)
-        k = (np.cos(out_angle) - 1) / (D.dot(-N) - 1)
-        refraction_ray = D * k - N * (1 - k)
-
-        new_origin = nudged_outwards.where(full_reflection, nudged_inwards)
-        rayD = rayD.where(full_reflection, refraction_ray)
-        colour += raytrace(new_origin, rayD, scene, bounce + 1) * obj.transparency
-
 
     return colour

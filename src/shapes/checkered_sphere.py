@@ -1,5 +1,6 @@
 from src.shapes.sphere import Sphere
 
+
 class CheckeredSphere(Sphere):
     def diffuseColourAt(self, M):
         """Return either the diffuse colour of the object or black, to form a checker pattern."""

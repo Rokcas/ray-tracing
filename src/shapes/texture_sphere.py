@@ -8,6 +8,7 @@ from PIL import Image
 from src.shapes.sphere import Sphere
 from functools import cached_property
 
+
 @dataclass
 class TextureSphere(Sphere):
     texture_path: str = "cat.webp"

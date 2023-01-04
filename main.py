@@ -17,6 +17,7 @@ rays = scene.get_rays()
 def fn(ray):
     return raytrace(scene.camera, ray, scene)
 
+
 print(f"Found {multiprocessing.cpu_count()} cores")
 with multiprocessing.Pool() as p:
     colours = p.map(fn, rays)
@@ -29,4 +30,3 @@ img.putdata(pixels)
 
 img.save("output.png")  # Uncomment to save the result
 img.show()
-

@@ -29,7 +29,6 @@ scene = Scene(
             centre=Vec3(-0.75, 0.1, 2.25),
             radius=0.6,
             roughness=30,
-            reflectivity=0.1,
         ),
         TextureSphere(  # Red sphere
             diffuse_colour=Rgb(1, 0.2, 0.1),
@@ -38,7 +37,7 @@ scene = Scene(
             # Attributes to make cat texture more visible
             specular_colour=Rgb(0, 0, 0),
             reflectivity=0,
-            texture_path="cat.webp",
+            texture_path="textures/cat.webp",
         ),
         CheckeredSphere(
             diffuse_colour=Rgb(0.75, 0.75, 0.75),

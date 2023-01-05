@@ -1,5 +1,5 @@
 from src.scene import LightSource, Scene, Screen
-from src.shapes.checkered_sphere import CheckeredSphere
+from src.shapes.checker_sphere import CheckerSphere
 from src.shapes.sphere import Sphere
 from src.shapes.texture_sphere import TextureSphere
 from src.vec3 import Rgb, Vec3
@@ -39,7 +39,7 @@ scene = Scene(
             reflectivity=0,
             texture_path="textures/cat.webp",
         ),
-        CheckeredSphere(
+        CheckerSphere(
             diffuse_colour=Rgb(0.75, 0.75, 0.75),
             centre=Vec3(0, -99999.5, 0),
             radius=99999,

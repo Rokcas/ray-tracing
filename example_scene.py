@@ -1,11 +1,11 @@
 from src.scene import LightSource, Scene, Screen
-from src.shapes.checkered_sphere import CheckeredSphere
+from src.shapes.checker_sphere import CheckerSphere
 from src.shapes.sphere import Sphere
 from src.shapes.texture_sphere import TextureSphere
 from src.vec3 import Rgb, Vec3
 
-WIDTH = 1200
-HEIGHT = 600
+WIDTH = 600
+HEIGHT = 300
 RATIO = WIDTH / HEIGHT
 
 scene = Scene(

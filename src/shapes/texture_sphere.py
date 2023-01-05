@@ -10,7 +10,7 @@ from src.vec3 import Rgb
 
 @dataclass
 class TextureSphere(Sphere):
-    texture_path: str = "cat.webp"
+    texture_path: str = "textures/cat.webp"
 
     @cached_property
     def texture_width(self):

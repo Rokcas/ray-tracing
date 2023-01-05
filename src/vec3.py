@@ -14,7 +14,9 @@ class Vec3:
 
     def __mul__(self, other):
         """Scale the vector by a number."""
-        return Vec3(self.x * other, self.y * other, self.z * other)
+
+        # TASK 1: Fix the implementation
+        return self
 
     def __truediv__(self, other):
         """Scale the vector by the inverse of the given number."""
@@ -22,7 +24,9 @@ class Vec3:
 
     def __add__(self, other):
         """Add two vectors."""
-        return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
+
+        # TASK 1: Fix the implementation
+        return self
 
     def __sub__(self, other):
         """Subtract one vector from another."""
@@ -30,7 +34,9 @@ class Vec3:
 
     def dot(self, other) -> float:
         """Calculate the dot product of two vectors."""
-        return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
+
+        # TASK 1: Fix the implementation
+        return 1
 
     def cross(self, other):
         """Calculate the cross product of two vectors."""

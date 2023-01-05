@@ -25,5 +25,5 @@ pixels = [tuple(int(255 * x) for x in c.components()) for c in colours]
 img = Image.new("RGB", (scene.screen.width, scene.screen.height))
 img.putdata(pixels)
 
-img.save("output.png")  # Uncomment to save the result
+img.save("output.png")
 img.show()

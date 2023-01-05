@@ -4,8 +4,8 @@ from src.shapes.sphere import Sphere
 from src.shapes.texture_sphere import TextureSphere
 from src.vec3 import Rgb, Vec3
 
-WIDTH = 600
-HEIGHT = 300
+WIDTH = 1200
+HEIGHT = 600
 RATIO = WIDTH / HEIGHT
 
 scene = Scene(
@@ -39,11 +39,7 @@ scene = Scene(
             reflectivity=0,
             texture_path="textures/cat.webp",
         ),
-        CheckeredSphere(
-            diffuse_colour=Rgb(0.75, 0.75, 0.75),
-            centre=Vec3(0, -99999.5, 0),
-            radius=99999,
-        ),
+        # TASK 3: Add an object that looks like a flat surface under the 3 spheres
     ],
     ambient_light=Rgb(0.1, 0.1, 0.1),
     light_sources=[

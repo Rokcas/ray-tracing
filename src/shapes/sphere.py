@@ -13,26 +13,12 @@ class Sphere(BaseShape):
     radius: float = 1
 
     def intersect(self, O: Vec3, D: Vec3) -> float:
-        b = 2 * D.dot(O - self.centre)
-        c = (
-            abs(self.centre)
-            + abs(O)
-            - 2 * self.centre.dot(O)
-            - (self.radius * self.radius)
-        )
-        disc = (b**2) - (4 * c)
+        """Return the distance to the nearest intersection of the object and the ray coming from O in direction D.
 
-        if disc < 0:
-            return FARAWAY
+        Return FARAWAY if there is no intersection.
+        """
 
-        sq = np.sqrt(disc)
-        h0 = (-b - sq) / 2
-        h1 = (-b + sq) / 2
-
-        if min(h0, h1) > 0:
-            return min(h0, h1)
-        if max(h0, h1) > 0:
-            return max(h0, h1)
+        # TASK 2: Implement this method for finding the distance to the nearest intersection
         return FARAWAY
 
     def normalAt(self, M):

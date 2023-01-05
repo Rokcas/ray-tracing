@@ -48,35 +48,17 @@ def illuminate(
     diffuse_colour = obj.diffuseColourAt(ipoint)
     colour = scene.ambient_light.compwise_mul(diffuse_colour)
 
-    # Calculate diffuse and specular illumination from each light source
-    for light_source in scene.light_sources:
-        to_light = (light_source.position - ipoint).norm()  # direction to light
+    # TASK 4: Calculate the diffuse lighting component and add it to colour.
+    # This component is equal to the sum of diffuse lighting on the object
+    # from all light sources that are not covered by other objects.
 
-        # Shadow: find if the point is shadowed or not.
-        # This is equivalent to finding if other objects are between ipoint and the light source
-        light_distances = [o.intersect(nudged, to_light) for o in objects]
-        shortest_light_distance = min(light_distances)
-        sees_light = shortest_light_distance == obj.intersect(nudged, to_light)
+    # TASK 5: Calculate the specular lighting component.
 
-        if sees_light:
-            # Lambert shading (diffuse)
-            lv = max(normal.dot(to_light), 0)
-            colour += light_source.colour.compwise_mul(diffuse_colour) * lv
-
-            # Blinn-Phong shading (specular)
-            phong = normal.dot((to_light + to_ray_origin).norm())
-            colour += light_source.colour.compwise_mul(obj.specular_colour) * math.pow(
-                np.clip(phong, 0, 1), obj.roughness
-            )
-
-    # Reflection
-    if bounce < MAX_BOUNCES:
-        reflection_direction = (
-            ray_direction - normal * 2 * ray_direction.dot(normal)
-        ).norm()
-        colour *= 1 - obj.reflectivity
-        colour += (
-            raytrace(nudged, reflection_direction, scene, bounce + 1) * obj.reflectivity
-        )
+    # TASK 6: Calculate perfectly reflected light.
+    # This can be done by recursively tracing another ray coming from the intersection point.
+    # Make sure the origin of this new ray is a small distance away from the surface of the object.
+    # Otherwise, the new ray would collide with it again.
+    # Use obj.reflectiveness to combine the perfectly reflected light with the previously
+    # calculated colour.
 
     return colour

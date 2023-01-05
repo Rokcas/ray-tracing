@@ -25,13 +25,14 @@ class TextureSphere(Sphere):
         return Image.open(self.texture_path).load()
 
     def diffuseColourAt(self, M):
-        """Return the colour of the texture that maps to point M."""
-        R = M - self.centre
+        # TASK 8: Change the following method to render the specified texture on the sphere.
 
-        theta = math.acos(R.y / self.radius)
-        phi = math.atan2(R.x, R.z)
+        # You will first need to calculate the spherical polar coordinates of
+        # the sphere at point M and then map them to the Cartesian coordinates
+        # on the image.
 
-        u = int(phi / 2 / math.pi * self.texture_width)
-        v = int(theta / math.pi * self.texture_height)
+        # You can get the pixel at coordinates (u, v) from the
+        # texture image using the following line of code:
+        Rgb(*self.texture[u, v]) / 255
 
-        return Rgb(*self.texture[u, v]) / 255
+        return super().diffuseColourAt(M)

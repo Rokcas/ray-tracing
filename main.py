@@ -15,9 +15,11 @@ def fn(ray) -> Rgb:
     return raytrace(scene.camera, ray, scene)
 
 
-print(f"Found {multiprocessing.cpu_count()} cores")
-with multiprocessing.Pool() as p:
-    colours = p.map(fn, rays)
+# print(f"Found {multiprocessing.cpu_count()} cores")
+# with multiprocessing.Pool() as p:
+    # colours = p.map(fn, rays)
+
+colours = [fn(ray) for ray in rays]
 
 print("Took", time.time() - t0)
 

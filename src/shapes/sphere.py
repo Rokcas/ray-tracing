@@ -20,7 +20,7 @@ class Sphere(BaseShape):
             - 2 * self.centre.dot(O)
             - (self.radius * self.radius)
         )
-        disc = (b**2) - (4 * c)
+        disc = (b ** 2) - (4 * c)
 
         if disc < 0:
             return FARAWAY

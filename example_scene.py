@@ -3,9 +3,11 @@ from src.shapes.checker_sphere import CheckerSphere
 from src.shapes.sphere import Sphere
 from src.shapes.texture_sphere import TextureSphere
 from src.vec3 import Rgb, Vec3
+from src.shapes.cylinder import Cylinder
+from src.shapes.plane import Plane
 
-WIDTH = 600
-HEIGHT = 300
+WIDTH = 300
+HEIGHT = 200
 RATIO = WIDTH / HEIGHT
 
 scene = Scene(
@@ -24,11 +26,20 @@ scene = Scene(
         Sphere(  # Blue sphere
             diffuse_colour=Rgb(0, 0, 1), centre=Vec3(0.75, 0.1, 1), radius=0.6
         ),
-        Sphere(  # Green sphere
-            diffuse_colour=Rgb(0.3, 0.7, 0.3),
-            centre=Vec3(-0.75, 0.1, 2.25),
-            radius=0.6,
-            roughness=30,
+        Cylinder(  # Red cylinder
+            diffuse_colour=Rgb(1, 0.2, 0.1),
+            centre=Vec3(-0.2, -0.1, 2.5),
+            radius=0.4,
+            height=1,
+            normal=Vec3(-1, 0.01, -1).norm(),
+            reflectivity=0.1,
+        ),
+        Plane(  # Light green plane
+            diffuse_colour=Rgb(0.6, 0.9, 0.6),
+            centre=Vec3(-0.75, 0.1, 60),
+            normal=Vec3(1, 1, -1).norm(),
+            reflectivity=0,
+            specular_colour=Rgb(0, 0, 0)
         ),
         TextureSphere(  # Red sphere
             diffuse_colour=Rgb(1, 0.2, 0.1),

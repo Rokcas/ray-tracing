@@ -38,11 +38,9 @@ def illuminate(
     ipoint = ray_origin + ray_direction * distance  # intersection point
     normal = obj.normalAt(ipoint)  # normal
 
-    to_ray_origin = (ray_origin - ipoint).norm()  # direction to ray origin
     nudged = (
         ipoint + normal * 0.0001
     )  # ipoint nudged to avoid intersecting with the same object
-    objects = scene.objects
 
     # Ambient
     diffuse_colour = obj.diffuseColourAt(ipoint)
@@ -50,13 +48,12 @@ def illuminate(
 
     # Calculate diffuse and specular illumination from each light source
     for light_source in scene.light_sources:
-        to_light = (light_source.position - ipoint).norm()  # direction to light
+        to_light = (light_source.position - nudged).norm()  # direction to light
 
         # Shadow: find if the point is shadowed or not.
         # This is equivalent to finding if other objects are between ipoint and the light source
-        light_distances = [o.intersect(nudged, to_light) for o in objects]
-        shortest_light_distance = min(light_distances)
-        sees_light = shortest_light_distance == obj.intersect(nudged, to_light)
+        light_distances = [o.intersect(nudged, to_light) for o in scene.objects]
+        sees_light = not any(ld < (light_source.position - nudged).length() for ld in light_distances)
 
         if sees_light:
             # Lambert shading (diffuse)
@@ -64,7 +61,7 @@ def illuminate(
             colour += light_source.colour.compwise_mul(diffuse_colour) * lv
 
             # Blinn-Phong shading (specular)
-            phong = normal.dot((to_light + to_ray_origin).norm())
+            phong = normal.dot((to_light - ray_direction).norm())
             colour += light_source.colour.compwise_mul(obj.specular_colour) * math.pow(
                 np.clip(phong, 0, 1), obj.roughness
             )
